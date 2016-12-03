@@ -1,0 +1,17 @@
+{
+  "name": "uitzendinggezocht-nl",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Thomas van der Westen <thomas@jannesmannes.nl>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/bower_components",
+    "test",
+    "tests"
+  ]
+}
