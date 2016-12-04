@@ -32,28 +32,27 @@ class SearchApp extends React.Component {
 
     componentDidMount() {
         if( undefined !== this.state.params.searchQuery ) {
-            this.doSearch( this.state.params.searchQuery );
+            this.doSearch( decodeURIComponent( this.state.params.searchQuery ) );
         }
         this.logPageView();
     }
 
     doSearch( val ) {
-
         axios.get( this.apiUrl + val )
             .then( ( res ) => {
                 this.setState( {
                     data: res.data,
-                    search_action: true,
-                    params: {
-                        searchQuery: val
-                    }
+                    search_action: true
                 } );
 
-                this.props.router.push({
-                    pathname: '/' + val
-                });
-                
+
                 if( '' !== val ) {
+                    if( this.state.params.searchQuery !== val ) {
+                        this.props.router.push( {
+                            pathname: '/' + encodeURIComponent( val )
+                        } );
+                    }
+
                     ReactGA.event( {
                         category: 'Action',
                         action: 'Search',

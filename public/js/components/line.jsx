@@ -6,7 +6,7 @@ function createMarkup( html ) {
 }
 
 export const Line = ( { line, serie, ga } ) => {
-    const start_at = "?start_at=" + (parseInt( line._source.start ) - 5);
+    const start_at = "?start_at=" + (parseInt( line._source.start ) - 2);
     const cue = line.highlight[ 'cues.text' ][ 0 ];
     const slug = serie._source.serieName.replace( /\s+/g, '-' ).toLowerCase();
     const time = new Date( serie._source.broadcasted_at * 1000 );
@@ -15,7 +15,7 @@ export const Line = ( { line, serie, ga } ) => {
         <li className="line">
             -> <span dangerouslySetInnerHTML={createMarkup(cue)}/>
             <ga.OutboundLink
-                eventLabel="Kijk vanaf dit punt"
+                eventLabel={'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at}
                 to={'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at }
                 target="_blank">
                 [Kijk vanaf dit punt]

@@ -114,7 +114,7 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            if (undefined !== this.state.params.searchQuery) {
-	                this.doSearch(this.state.params.searchQuery);
+	                this.doSearch(decodeURIComponent(this.state.params.searchQuery));
 	            }
 	            this.logPageView();
 	        }
@@ -126,17 +126,16 @@
 	            _axios2.default.get(this.apiUrl + val).then(function (res) {
 	                _this2.setState({
 	                    data: res.data,
-	                    search_action: true,
-	                    params: {
-	                        searchQuery: val
-	                    }
-	                });
-	
-	                _this2.props.router.push({
-	                    pathname: '/' + val
+	                    search_action: true
 	                });
 	
 	                if ('' !== val) {
+	                    if (_this2.state.params.searchQuery !== val) {
+	                        _this2.props.router.push({
+	                            pathname: '/' + encodeURIComponent(val)
+	                        });
+	                    }
+	
 	                    _reactGa2.default.event({
 	                        category: 'Action',
 	                        action: 'Search',
@@ -23957,7 +23956,7 @@
 	        serie = _ref.serie,
 	        ga = _ref.ga;
 	
-	    var start_at = "?start_at=" + (parseInt(line._source.start) - 5);
+	    var start_at = "?start_at=" + (parseInt(line._source.start) - 2);
 	    var cue = line.highlight['cues.text'][0];
 	    var slug = serie._source.serieName.replace(/\s+/g, '-').toLowerCase();
 	    var time = new Date(serie._source.broadcasted_at * 1000);
@@ -23970,7 +23969,7 @@
 	        _react2.default.createElement(
 	            ga.OutboundLink,
 	            {
-	                eventLabel: 'Kijk vanaf dit punt',
+	                eventLabel: 'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at,
 	                to: 'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at,
 	                target: '_blank' },
 	            '[Kijk vanaf dit punt]'
