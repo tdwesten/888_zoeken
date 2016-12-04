@@ -14,8 +14,8 @@ function getSubTitles( id, cb ) {
                 cb( parsed );
 
             } catch ( e ) {
-                // console.log( 'http://e.omroep.nl/tt888/' + id );
-                // console.log( e.message );
+                console.log( 'http://e.omroep.nl/tt888/' + id );
+                console.log( e.message );
                 cb( parsed );
             }
         } else {
