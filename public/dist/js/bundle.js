@@ -61,9 +61,11 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
-	var _resultList = __webpack_require__(/*! ./components/resultList.jsx */ 214);
+	var _resultList = __webpack_require__(/*! ./components/resultList.jsx */ 204);
 	
-	var _SearchForm = __webpack_require__(/*! ./components/SearchForm.jsx */ 204);
+	var _SearchForm = __webpack_require__(/*! ./components/SearchForm.jsx */ 213);
+	
+	var _ResultCount = __webpack_require__(/*! ./components/ResultCount.jsx */ 216);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -73,7 +75,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	__webpack_require__(/*! ./../scss/style.scss */ 209);
+	__webpack_require__(/*! ./../scss/style.scss */ 217);
 	
 	window.id = 0;
 	
@@ -89,6 +91,7 @@
 	
 	
 	        _this.state = {
+	            search_action: false,
 	            data: {
 	                hits: [],
 	                total: 0
@@ -122,7 +125,7 @@
 	            // Update data
 	            _axios2.default.get(this.apiUrl + val).then(function (res) {
 	                // this.state.data.push( res.data );
-	                _this2.setState({ data: res.data });
+	                _this2.setState({ data: res.data, search_action: true });
 	            });
 	        }
 	    }, {
@@ -132,10 +135,34 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_SearchForm.SearchForm, { doSearch: this.doSearch.bind(this) }),
-	                _react2.default.createElement(_resultList.ResultList, {
-	                    results: this.state.data
-	                })
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'container' },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        '888_zoeken'
+	                    ),
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'NPO ondertitels doorzoekbaar, ',
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            'gebouwd door ',
+	                            _react2.default.createElement(
+	                                'a',
+	                                {
+	                                    href: 'https://twitter.com/tdwesten' },
+	                                '@tdwesten'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(_SearchForm.SearchForm, { doSearch: this.doSearch.bind(this) }),
+	                    _react2.default.createElement(_ResultCount.ResultCount, { total: this.state.data.total, search_action: this.state.search_action })
+	                ),
+	                _react2.default.createElement(_resultList.ResultList, { results: this.state.data })
 	            );
 	        }
 	    }]);
@@ -143,7 +170,7 @@
 	    return SearchApp;
 	}(_react2.default.Component);
 	
-	(0, _reactDom.render)(_react2.default.createElement(SearchApp, null), document.getElementById('container'));
+	(0, _reactDom.render)(_react2.default.createElement(SearchApp, null), document.getElementById('react-app'));
 
 /***/ },
 /* 1 */
@@ -23742,7 +23769,7 @@
 /***/ },
 /* 204 */
 /*!*********************************************!*\
-  !*** ./public/js/components/SearchForm.jsx ***!
+  !*** ./public/js/components/resultList.jsx ***!
   \*********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -23751,7 +23778,138 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.SearchForm = undefined;
+	exports.ResultList = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _result = __webpack_require__(/*! ./result.jsx */ 205);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	__webpack_require__(/*! ./result.scss */ 211);
+	
+	var ResultList = exports.ResultList = function ResultList(_ref) {
+	    var results = _ref.results;
+	
+	    if (results.total === 0) {
+	        return null;
+	    }
+	
+	    var resultsNode = results.hits.map(function (result, index) {
+	        return _react2.default.createElement(_result.Result, { result: result, key: result._id + index });
+	    });
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        resultsNode
+	    );
+	};
+	
+	ResultList.propTypes = {
+	    results: _react.PropTypes.object
+	};
+	
+	ResultList.defaultProps = {
+	    results: {}
+	};
+	
+	exports.default = ResultList;
+
+/***/ },
+/* 205 */
+/*!*****************************************!*\
+  !*** ./public/js/components/result.jsx ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Result = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _line = __webpack_require__(/*! ./line.jsx */ 206);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	__webpack_require__(/*! ./result.scss */ 211);
+	
+	var Result = exports.Result = function Result(_ref) {
+	    var result = _ref.result;
+	
+	    var lines = result.inner_hits.cues.hits.hits;
+	    var time = new Date(result._source.broadcasted_at * 1000);
+	    var date = time.getDate() + '/' + time.getMonth() + '/' + time.getFullYear();
+	
+	    var linesNode = lines.map(function (line, index) {
+	        return _react2.default.createElement(_line.Line, { line: line, serie: result, key: line._score + index });
+	    });
+	
+	    console.log(result);
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'result__item' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'container' },
+	            _react2.default.createElement(
+	                'h3',
+	                null,
+	                result._source.serieName,
+	                ' ',
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'small gray' },
+	                    'van/op'
+	                ),
+	                ' ',
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'small' },
+	                    date
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'ul',
+	                null,
+	                linesNode
+	            )
+	        )
+	    );
+	};
+	
+	Result.propTypes = {
+	    result: _react.PropTypes.object
+	};
+	
+	Result.defaultProps = {
+	    result: {}
+	};
+	
+	exports.default = Result;
+
+/***/ },
+/* 206 */
+/*!***************************************!*\
+  !*** ./public/js/components/line.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Line = undefined;
 	
 	var _react = __webpack_require__(/*! react */ 1);
 	
@@ -23759,58 +23917,67 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(/*! ./searchForm.scss */ 205);
+	__webpack_require__(/*! ./line.scss */ 207);
 	
-	var SearchForm = exports.SearchForm = function SearchForm(_ref) {
-	    var doSearch = _ref.doSearch;
+	function createMarkup(html) {
+	    return { __html: html };
+	}
 	
-	    var input = void 0;
+	var Line = exports.Line = function Line(_ref) {
+	    var line = _ref.line,
+	        serie = _ref.serie;
 	
+	    var start_at = "?start_at=" + (parseInt(line._source.start) - 5);
+	    var cue = line.highlight['cues.text'][0];
+	    var slug = serie._source.serieName.replace(/\s+/g, '-').toLowerCase();
+	    var time = new Date(serie._source.broadcasted_at * 1000);
+	    var date = ("0" + time.getDate()).slice(-2) + '-' + ("0" + (time.getMonth() + 1)).slice(-2) + '-' + time.getFullYear();
 	    return _react2.default.createElement(
-	        'form',
-	        { onSubmit: function onSubmit(e) {
-	                e.preventDefault();
-	                doSearch(input.value);
-	                // input.value = '';
-	            } },
-	        _react2.default.createElement('input', { className: 'form-control col-md-12', ref: function ref(node) {
-	                input = node;
-	            } }),
-	        _react2.default.createElement('br', null)
+	        'li',
+	        null,
+	        '-> ',
+	        _react2.default.createElement('span', { dangerouslySetInnerHTML: createMarkup(cue) }),
+	        _react2.default.createElement(
+	            'a',
+	            { href: 'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at, target: 'blank' },
+	            '[Kijk vanaf dit punt]'
+	        )
 	    );
 	};
 	
-	SearchForm.propTypes = {
-	    doSearch: _react.PropTypes.func
+	Line.propTypes = {
+	    line: _react.PropTypes.object,
+	    serie: _react.PropTypes.object
 	};
 	
-	SearchForm.defaultProps = {
-	    doSearch: null
+	Line.defaultProps = {
+	    line: {},
+	    serie: {}
 	};
 	
-	exports.default = SearchForm;
+	exports.default = Line;
 
 /***/ },
-/* 205 */
-/*!**********************************************!*\
-  !*** ./public/js/components/searchForm.scss ***!
-  \**********************************************/
+/* 207 */
+/*!****************************************!*\
+  !*** ./public/js/components/line.scss ***!
+  \****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./../../../~/sass-loader!./searchForm.scss */ 206);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./../../../~/sass-loader!./line.scss */ 208);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 208)(content, {});
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 210)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./searchForm.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./searchForm.scss");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./line.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./line.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -23820,24 +23987,24 @@
 	}
 
 /***/ },
-/* 206 */
-/*!*****************************************************************************!*\
-  !*** ./~/css-loader!./~/sass-loader!./public/js/components/searchForm.scss ***!
-  \*****************************************************************************/
+/* 208 */
+/*!***********************************************************************!*\
+  !*** ./~/css-loader!./~/sass-loader!./public/js/components/line.scss ***!
+  \***********************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 207)();
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 209)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "form {\n  background-color: red; }\n", ""]);
+	exports.push([module.id, "span em {\n  font-weight: bolder; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 207 */
+/* 209 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -23896,7 +24063,7 @@
 
 
 /***/ },
-/* 208 */
+/* 210 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -24151,52 +24318,6 @@
 
 
 /***/ },
-/* 209 */
-/*!********************************!*\
-  !*** ./public/scss/style.scss ***!
-  \********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./style.scss */ 210);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 208)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./style.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./style.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 210 */
-/*!***************************************************************!*\
-  !*** ./~/css-loader!./~/sass-loader!./public/scss/style.scss ***!
-  \***************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 207)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "", ""]);
-	
-	// exports
-
-
-/***/ },
 /* 211 */
 /*!******************************************!*\
   !*** ./public/js/components/result.scss ***!
@@ -24209,7 +24330,7 @@
 	var content = __webpack_require__(/*! !./../../../~/css-loader!./../../../~/sass-loader!./result.scss */ 212);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 208)(content, {});
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 210)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -24232,84 +24353,20 @@
   \*************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 207)();
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 209)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "form {\n  background-color: red; }\n", ""]);
+	exports.push([module.id, ".result__item {\n  border-top: 1px solid #D0D0D0; }\n  .result__item h3 {\n    font-size: 1.8rem;\n    font-weight: 600; }\n    .result__item h3 .small {\n      font-weight: 300;\n      font-size: 1.2rem;\n      color: #000; }\n    .result__item h3 .gray {\n      color: #D0D0D0; }\n  .result__item a {\n    text-decoration: none;\n    font-size: 1.2rem; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
 /* 213 */
-/*!*****************************************!*\
-  !*** ./public/js/components/result.jsx ***!
-  \*****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Result = undefined;
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _line = __webpack_require__(/*! ./line.jsx */ 215);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	__webpack_require__(/*! ./result.scss */ 211);
-	
-	var Result = exports.Result = function Result(_ref) {
-	    var result = _ref.result;
-	
-	    var lines = result.inner_hits.cues.hits.hits;
-	
-	    var linesNode = lines.map(function (line, index) {
-	        return _react2.default.createElement(_line.Line, { line: line, serie: result, key: line._score + index });
-	    });
-	
-	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	            'h3',
-	            null,
-	            result._source.serieName
-	        ),
-	        _react2.default.createElement(
-	            'p',
-	            null,
-	            result._source.serieDescription
-	        ),
-	        _react2.default.createElement(
-	            'ul',
-	            null,
-	            linesNode
-	        )
-	    );
-	};
-	
-	Result.propTypes = {
-	    result: _react.PropTypes.object
-	};
-	
-	Result.defaultProps = {
-	    result: {}
-	};
-	
-	exports.default = Result;
-
-/***/ },
-/* 214 */
 /*!*********************************************!*\
-  !*** ./public/js/components/resultList.jsx ***!
+  !*** ./public/js/components/SearchForm.jsx ***!
   \*********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -24318,59 +24375,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.ResultList = undefined;
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _result = __webpack_require__(/*! ./result.jsx */ 213);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	__webpack_require__(/*! ./result.scss */ 211);
-	
-	var ResultList = exports.ResultList = function ResultList(_ref) {
-	    var results = _ref.results;
-	
-	    if (results.total === 0) {
-	        return null;
-	    }
-	
-	    var resultsNode = results.hits.map(function (result, index) {
-	        return _react2.default.createElement(_result.Result, { result: result, key: result._id + index });
-	    });
-	
-	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        resultsNode
-	    );
-	};
-	
-	ResultList.propTypes = {
-	    results: _react.PropTypes.object
-	};
-	
-	ResultList.defaultProps = {
-	    results: {}
-	};
-	
-	exports.default = ResultList;
-
-/***/ },
-/* 215 */
-/*!***************************************!*\
-  !*** ./public/js/components/line.jsx ***!
-  \***************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Line = undefined;
+	exports.SearchForm = undefined;
 	
 	var _react = __webpack_require__(/*! react */ 1);
 	
@@ -24378,61 +24383,57 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(/*! ./line.scss */ 216);
+	__webpack_require__(/*! ./searchForm.scss */ 214);
 	
-	function createMarkup(html) {
-	    return { __html: html };
-	}
+	var SearchForm = exports.SearchForm = function SearchForm(_ref) {
+	    var doSearch = _ref.doSearch;
 	
-	var Line = exports.Line = function Line(_ref) {
-	    var line = _ref.line,
-	        serie = _ref.serie;
-	
-	    var start_at = "?start_at=" + (parseInt(line._source.start) - 25);
-	    var cue = line.highlight['cues.text'][0];
-	    var slug = serie._source.serieName.replace(/\s+/g, '-').toLowerCase();
-	    var time = new Date(serie._source.broadcasted_at * 1000);
-	    var date = ("0" + time.getDate()).slice(-2) + '-' + ("0" + (time.getMonth() + 1)).slice(-2) + '-' + time.getFullYear();
+	    var input = void 0;
 	    return _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement('a', { href: 'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at, target: 'blank', dangerouslySetInnerHTML: createMarkup(cue) })
+	        'form',
+	        { onSubmit: function onSubmit(e) {
+	                e.preventDefault();
+	                doSearch(input.value);
+	                // input.value = '';
+	            }, className: 'searchform' },
+	        _react2.default.createElement('input', { autoFocus: true, ref: function ref(node) {
+	                input = node;
+	            }, placeholder: 'Keyword + Enter' }),
+	        _react2.default.createElement('br', null)
 	    );
 	};
 	
-	Line.propTypes = {
-	    line: _react.PropTypes.object,
-	    serie: _react.PropTypes.object
+	SearchForm.propTypes = {
+	    doSearch: _react.PropTypes.func
 	};
 	
-	Line.defaultProps = {
-	    line: {},
-	    serie: {}
+	SearchForm.defaultProps = {
+	    doSearch: null
 	};
 	
-	exports.default = Line;
+	exports.default = SearchForm;
 
 /***/ },
-/* 216 */
-/*!****************************************!*\
-  !*** ./public/js/components/line.scss ***!
-  \****************************************/
+/* 214 */
+/*!**********************************************!*\
+  !*** ./public/js/components/searchForm.scss ***!
+  \**********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./../../../~/sass-loader!./line.scss */ 217);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./../../../~/sass-loader!./searchForm.scss */ 215);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 208)(content, {});
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 210)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./line.scss", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./line.scss");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./searchForm.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./searchForm.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -24442,18 +24443,119 @@
 	}
 
 /***/ },
-/* 217 */
-/*!***********************************************************************!*\
-  !*** ./~/css-loader!./~/sass-loader!./public/js/components/line.scss ***!
-  \***********************************************************************/
+/* 215 */
+/*!*****************************************************************************!*\
+  !*** ./~/css-loader!./~/sass-loader!./public/js/components/searchForm.scss ***!
+  \*****************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 207)();
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 209)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "form {\n  background-color: red; }\n", ""]);
+	exports.push([module.id, "form.searchform {\n  padding: 25px 0; }\n  form.searchform input {\n    border: 1px solid #D0D0D0;\n    font-size: 2.6rem;\n    padding: 15px;\n    width: calc(100% - 30px); }\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 216 */
+/*!**********************************************!*\
+  !*** ./public/js/components/ResultCount.jsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.ResultCount = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// require( './result.scss' );
+	
+	var ResultCount = exports.ResultCount = function ResultCount(_ref) {
+	    var total = _ref.total,
+	        search_action = _ref.search_action;
+	
+	    var mgs = false;
+	
+	    if (total > 0 && search_action) {
+	        mgs = total + ' Resultaten gevonden';
+	    } else if (total === 0 && search_action) {
+	        mgs = 'Geen resultaten gevonden, bammmer...';
+	    } else {
+	        return null;
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        mgs
+	    );
+	};
+	
+	ResultCount.propTypes = {
+	    total: _react.PropTypes.number,
+	    search_action: _react.PropTypes.bool
+	};
+	
+	ResultCount.defaultProps = {
+	    total: 0,
+	    search_action: false
+	};
+	
+	exports.default = ResultCount;
+
+/***/ },
+/* 217 */
+/*!********************************!*\
+  !*** ./public/scss/style.scss ***!
+  \********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./style.scss */ 218);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 210)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./style.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./style.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 218 */
+/*!***************************************************************!*\
+  !*** ./~/css-loader!./~/sass-loader!./public/scss/style.scss ***!
+  \***************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 209)();
+	// imports
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);", ""]);
+	
+	// module
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after {\n  content: '';\n  content: none; }\n\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nbody {\n  font-family: 'Poppins', sans-serif;\n  font-size: 1.7rem;\n  line-height: 1.45;\n  color: #000; }\n\n.container {\n  margin: 0 auto;\n  max-width: 1280px;\n  padding: 25px; }\n\nh1 {\n  font-size: 4.4rem;\n  font-weight: bold; }\n\nh3 span {\n  color: #D0D0D0; }\n  h3 span a {\n    color: #D0D0D0;\n    text-decoration: none; }\n    h3 span a:hover {\n      color: #0055FF;\n      text-decoration: underline; }\n", ""]);
 	
 	// exports
 

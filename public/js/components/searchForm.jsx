@@ -4,16 +4,14 @@ require( './searchForm.scss' );
 
 export const SearchForm = ( { doSearch } ) => {
     let input;
-
     return (
         <form onSubmit={(e) => {
         e.preventDefault();
         doSearch(input.value);
         // input.value = '';
-      }}>
-            <input className="form-control col-md-12" ref={node => {
-        input = node;
-      }} />
+
+      }} className="searchform">
+            <input autoFocus ref={node => { input = node; }} placeholder="Keyword + Enter" />
             <br />
         </form>
     );

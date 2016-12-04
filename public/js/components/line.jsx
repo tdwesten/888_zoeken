@@ -7,15 +7,20 @@ function createMarkup( html ) {
 }
 
 export const Line = ( { line, serie } ) => {
-    const start_at = "?start_at=" + (parseInt( line._source.start ) - 25);
-    const cue = line.highlight['cues.text'][0];
-    const slug = serie._source.serieName.replace(/\s+/g, '-').toLowerCase();
+    const start_at = "?start_at=" + (parseInt( line._source.start ) - 5);
+    const cue = line.highlight[ 'cues.text' ][ 0 ];
+    const slug = serie._source.serieName.replace( /\s+/g, '-' ).toLowerCase();
     const time = new Date( serie._source.broadcasted_at * 1000 );
-    const date = ("0" + time.getDate()).slice(-2) + '-' + ("0" + (time.getMonth() + 1)).slice(-2) + '-' + time.getFullYear();
-    return (<li>
-            <a href={'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at } target="blank" dangerouslySetInnerHTML={createMarkup(cue)}/>
+    const date = ("0" + time.getDate()).slice( -2 ) + '-' + ("0" + (time.getMonth() + 1)).slice( -2 ) + '-' + time.getFullYear();
+    return (
+        <li>
+            -> <span dangerouslySetInnerHTML={createMarkup(cue)}/>
+            <a href={'http://www.npo.nl/' + slug + '/' + date + '/' + serie._source.nebo_id + start_at } target="blank">
+                [Kijk vanaf dit punt]
+            </a>
 
-    </li>);
+        </li>
+    );
 };
 
 

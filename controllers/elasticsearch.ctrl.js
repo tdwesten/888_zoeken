@@ -6,7 +6,7 @@ var elasticClient = new require( 'elasticsearch' ).Client( {
     //     accessKey: process.env.AMS_ACCESSKEY,
     //     secretKey: process.env.AMS_SECRETSKEY
     // },
-    log: 'trace'
+    log: 'error'
 } );
 
 
