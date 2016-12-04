@@ -1,21 +1,26 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Router, Route, hashHistory } from 'react-router'
 import axios from 'axios';
 
 import { ResultList } from './components/resultList.jsx';
 import { SearchForm } from './components/SearchForm.jsx';
 import { ResultCount } from './components/ResultCount.jsx';
 
+import ReactGA from 'react-ga';
+ReactGA.initialize( 'UA-88370387-1' );
+
 require( './../scss/style.scss' );
 
 window.id = 0;
 
 class SearchApp extends React.Component {
-    constructor( props ) {
+    constructor( props, context ) {
         // Pass props to parent class
         super( props );
         // Set initial state
         this.state = {
+            params: props.params,
             search_action: false,
             data: {
                 hits: [],
@@ -25,41 +30,63 @@ class SearchApp extends React.Component {
         this.apiUrl = 'http://localhost:5000/search/s/'
     }
 
-    // Lifecycle method
     componentDidMount() {
-        // Make HTTP reques with Axios
-        // axios.get( this.apiUrl )
-        //     .then( ( res ) => {
-        //         // Set state with result
-        //         this.setState( { data: res.data } );
-        //     } );
+        if( undefined !== this.state.params.searchQuery ) {
+            this.doSearch( this.state.params.searchQuery );
+        }
+        this.logPageView();
     }
 
-    // Add results handler
     doSearch( val ) {
-        // Update data
+
         axios.get( this.apiUrl + val )
             .then( ( res ) => {
-                // this.state.data.push( res.data );
-                this.setState( { data: res.data, search_action: true } );
+                this.setState( {
+                    data: res.data,
+                    search_action: true,
+                    params: {
+                        searchQuery: val
+                    }
+                } );
+
+                this.props.router.push({
+                    pathname: '/' + val
+                });
+                
+                if( '' !== val ) {
+                    ReactGA.event( {
+                        category: 'Action',
+                        action: 'Search',
+                        label: val
+                    } );
+                }
             } );
     }
 
+    logPageView() {
+        ReactGA.set( { page: window.location.pathname } );
+        ReactGA.pageview( window.location.pathname );
+    }
+
     render() {
-        // Render JSX
         return (
             <div>
                 <div className="container">
                     <h1>888_zoeken</h1>
                     <h3>NPO ondertitels doorzoekbaar, <span>gebouwd door <a
                         href="https://twitter.com/tdwesten">@tdwesten</a></span></h3>
-                    <SearchForm doSearch={this.doSearch.bind(this)}/>
+                    <SearchForm doSearch={this.doSearch.bind(this)} query={this.state.params.searchQuery}/>
                     <ResultCount total={this.state.data.total} search_action={this.state.search_action}/>
                 </div>
-                <ResultList results={ this.state.data }/>
+                <ResultList results={ this.state.data } ga={ReactGA}/>
             </div>
         );
     }
 }
-
-render( <SearchApp />, document.getElementById( 'react-app' ) );
+render( (
+    <Router history={hashHistory}>
+        <Route path="/" component={SearchApp}>
+            <Route path="/:searchQuery" component={SearchApp}/>
+        </Route>
+    </Router>
+), document.getElementById( 'react-app' ) )

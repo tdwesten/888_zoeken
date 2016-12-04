@@ -2,16 +2,14 @@ import React, { PropTypes } from 'react';
 
 require( './searchForm.scss' );
 
-export const SearchForm = ( { doSearch } ) => {
+export const SearchForm = ( { doSearch, query } ) => {
     let input;
     return (
         <form onSubmit={(e) => {
         e.preventDefault();
         doSearch(input.value);
-        // input.value = '';
-
       }} className="searchform">
-            <input autoFocus ref={node => { input = node; }} placeholder="Keyword + Enter" />
+            <input autoFocus ref={node => { input = node; }} placeholder="Keyword + Enter" defaultValue={ query || '' } />
             <br />
         </form>
     );
@@ -19,11 +17,13 @@ export const SearchForm = ( { doSearch } ) => {
 
 
 SearchForm.propTypes = {
-    doSearch: PropTypes.func
+    doSearch: PropTypes.func,
+    query: PropTypes.string,
 };
 
 SearchForm.defaultProps = {
-    doSearch: null
+    doSearch: null,
+    query: ''
 };
 
 export default SearchForm;
