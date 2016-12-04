@@ -106,7 +106,7 @@
 	                total: 0
 	            }
 	        };
-	        _this.apiUrl = 'http://localhost:5000/search/s/';
+	        _this.apiUrl = window.location.origin + '/search/s/';
 	        return _this;
 	    }
 	

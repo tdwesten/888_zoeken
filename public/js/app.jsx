@@ -27,7 +27,7 @@ class SearchApp extends React.Component {
                 total: 0
             }
         };
-        this.apiUrl = 'http://localhost:5000/search/s/'
+        this.apiUrl = window.location.origin +'/search/s/';
     }
 
     componentDidMount() {
