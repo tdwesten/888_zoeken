@@ -4,10 +4,9 @@ const _ = require( 'lodash' );
 const elastic = require( './elasticsearch.ctrl' );
 const episodesModel = require( '../models/episodes.js' );
 
-function start( limit, skip ) {
+function start(){
     elastic.indexExists()
         .then( function ( exists ) {
-            console.log( exists );
             if( !exists ) {
                 return elastic.initIndex()
                     .then( function () {
@@ -16,7 +15,8 @@ function start( limit, skip ) {
             }
         } )
         .then( function () {
-            episodesModel.find().limit( parseInt( limit ) ).skip( parseInt( skip ) ).exec( function ( err, episodes ) {
+            episodesModel.find( { in_es: { $ne: true } }, function ( err, episodes ) {
+                console.log( episodes.length );
                 var json = [];
                 var counter = 0;
 
@@ -28,6 +28,7 @@ function start( limit, skip ) {
 
                 _.forEach( episodes, function ( episode ) {
                     subtitles.getSubTitles( episode.nebo_id, function ( data ) {
+
                         if( 'object' == typeof data && data.valid ) {
                             var elm = {
                                 cues: data.cues,
@@ -63,12 +64,14 @@ function start( limit, skip ) {
                             if( counter % 50 == 0 ) {
                                 var documents = json;
                                 json = [];
-                                elastic.bulk( documents ).then( function ( err ) {
-                                    console.log( err.items );
-                                } );
+                                elastic.bulk( documents );
                             }
 
                             counter = counter + 1;
+
+                            episodesModel.findOneAndUpdate({ nebo_id: episode.nebo_id }, { in_es: true }, function ( err, data ) {
+
+                            } );
                         }
                         done();
                     } );

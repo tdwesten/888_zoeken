@@ -32,23 +32,14 @@ function importSeries( cb ) {
     getSeries( function ( series ) {
 
         var done = _.after( series.length, function () {
-            seriesModel.count( {}, function (err, count ) {
-                response.series = count;
-
-                episodesModel.count( {}, function (err, count ) {
-                    response.episodes = count;
-                    cb( response );
-                } );
-            } );
+           cb();
         } );
 
         _.forEach( series, function ( serie ) {
             addSerie( serie, function () {
                 done();
             } );
-        } )
-
-
+        } );
     } );
 }
 
@@ -88,12 +79,11 @@ function addEpisode( serie, cb ) {
             _.forEach( data.episodes, function ( episode ) {
                 episode[ 'serieName' ] = serie.name;
                 episode[ 'serieDescription' ] = serie.description;
-                episode[ 'in_es' ] = false;
 
                 episodesModel.findOneAndUpdate( {
                     nebo_id: episode.nebo_id
                 }, episode, {
-                    new: true, upsert: true
+                    upsert: true
                 }, function ( err, newEpisode ) {
                     done();
                 } );

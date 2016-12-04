@@ -182,10 +182,10 @@ function search( input ) {
                                     type: "phrase",
                                     fields: [
                                         "cues.text^3",
-                                        "description^2.5",
-                                        "name^2",
-                                        "serieName^1.5",
-                                        "serieDescription^1"
+                                        "serieName^2.5",
+                                        "serieDescription^2",
+                                        "description^2",
+                                        "name^2"
                                     ],
                                     // fuzziness: "1",
                                     prefix_length: 2

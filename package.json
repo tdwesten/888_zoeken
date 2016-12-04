@@ -39,6 +39,7 @@
     "jss": "^5.0.0",
     "mongoose": "^4.6.8",
     "morgan": "~1.7.0",
+    "node-cron": "^1.1.2",
     "node-env-file": "^0.1.8",
     "node-webvtt": "^1.0.2",
     "react-ga": "^2.1.2",
