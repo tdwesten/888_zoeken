@@ -73,7 +73,7 @@ class SearchApp extends React.Component {
                 <div className="container">
                     <h1>888_zoeken</h1>
                     <h3>NPO ondertitels doorzoekbaar, <span>gebouwd door <a
-                        href="https://twitter.com/tdwesten">@tdwesten</a></span></h3>
+                        href="https://twitter.com/tdwesten" target="blank">@tdwesten</a></span></h3>
                     <SearchForm doSearch={this.doSearch.bind(this)} query={this.state.params.searchQuery}/>
                     <ResultCount total={this.state.data.total} search_action={this.state.search_action}/>
                 </div>

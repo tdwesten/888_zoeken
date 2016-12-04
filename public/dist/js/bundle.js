@@ -175,7 +175,7 @@
 	                            _react2.default.createElement(
 	                                'a',
 	                                {
-	                                    href: 'https://twitter.com/tdwesten' },
+	                                    href: 'https://twitter.com/tdwesten', target: 'blank' },
 	                                '@tdwesten'
 	                            )
 	                        )
