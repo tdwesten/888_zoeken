@@ -75,7 +75,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	__webpack_require__(/*! ./../scss/style.scss */ 217);
+	__webpack_require__(/*! ./../scss/style.scss */ 273);
 	
 	window.id = 0;
 	
@@ -23868,13 +23868,8 @@
 	                ' ',
 	                _react2.default.createElement(
 	                    'span',
-	                    { className: 'small gray' },
-	                    'van/op'
-	                ),
-	                ' ',
-	                _react2.default.createElement(
-	                    'span',
 	                    { className: 'small' },
+	                    'van ',
 	                    date
 	                )
 	            ),
@@ -23998,7 +23993,7 @@
 	
 	
 	// module
-	exports.push([module.id, "span em {\n  font-weight: bolder; }\n", ""]);
+	exports.push([module.id, "span em {\n  font-weight: bold;\n  font-style: italic; }\n", ""]);
 	
 	// exports
 
@@ -24358,7 +24353,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".result__item {\n  border-top: 1px solid #D0D0D0; }\n  .result__item h3 {\n    font-size: 1.8rem;\n    font-weight: 600; }\n    .result__item h3 .small {\n      font-weight: 300;\n      font-size: 1.2rem;\n      color: #000; }\n    .result__item h3 .gray {\n      color: #D0D0D0; }\n  .result__item a {\n    text-decoration: none;\n    font-size: 1.2rem; }\n", ""]);
+	exports.push([module.id, ".result__item {\n  border-top: 1px solid #D0D0D0; }\n  .result__item h3 {\n    font-size: 1.8rem;\n    font-weight: 600; }\n    .result__item h3 .small {\n      font-weight: 300;\n      font-size: 1.2rem;\n      color: #000; }\n    .result__item h3 .gray {\n      color: #D0D0D0; }\n  .result__item a {\n    text-decoration: none;\n    font-size: 1.2rem;\n    margin-left: 10px; }\n", ""]);
 	
 	// exports
 
@@ -24515,7 +24510,63 @@
 	exports.default = ResultCount;
 
 /***/ },
-/* 217 */
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */
 /*!********************************!*\
   !*** ./public/scss/style.scss ***!
   \********************************/
@@ -24524,7 +24575,7 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./style.scss */ 218);
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./style.scss */ 274);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 210)(content, {});
@@ -24544,7 +24595,7 @@
 	}
 
 /***/ },
-/* 218 */
+/* 274 */
 /*!***************************************************************!*\
   !*** ./~/css-loader!./~/sass-loader!./public/scss/style.scss ***!
   \***************************************************************/

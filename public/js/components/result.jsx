@@ -17,7 +17,7 @@ export const Result = ( { result } ) => {
     return (
         <div className="result__item">
             <div className="container">
-                <h3>{result._source.serieName} <span className="small gray">van/op</span> <span className="small">{ date }</span></h3>
+                <h3>{result._source.serieName} <span className="small">van { date }</span></h3>
                 <ul>
                     { linesNode }
                 </ul>

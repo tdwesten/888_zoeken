@@ -170,7 +170,7 @@ function search( input ) {
                 "excludes": [ "cues" ]
             },
             from: 0,
-            size: 10,
+            size: 50,
             query: {
                 nested: {
                     path: "cues",
