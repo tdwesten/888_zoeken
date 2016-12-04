@@ -206,7 +206,10 @@ function search( input ) {
                             fields: {
                                 "cues.text": {}
                             }
-                        }
+                        },
+                        sort: [
+                            { "cues.start": 'asc' }
+                        ]
                     }
                 }
             }
