@@ -1,13 +1,18 @@
-var elasticClient = new require( 'elasticsearch' ).Client( {
+var args = {
     hosts: process.env.ESHOST,
-    // connectionClass: require( 'http-aws-es' ),
-    // amazonES: {
-    //     region: process.env.AMS_REGION,
-    //     accessKey: process.env.AMS_ACCESSKEY,
-    //     secretKey: process.env.AMS_SECRETSKEY
-    // },
     log: 'error'
-} );
+};
+
+if( process.env.ENV === 'production' ) {
+    args[ 'connectionClass' ] = require( 'http-aws-es' );
+    args[ 'amazonES' ] = {
+        region: process.env.AMS_REGION,
+        accessKey: process.env.AMS_ACCESSKEY,
+        secretKey: process.env.AMS_SECRETSKEY
+    };
+};
+
+var elasticClient = new require( 'elasticsearch' ).Client( args );
 
 
 var indexName = process.env.ESINDEX;
