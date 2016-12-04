@@ -23880,7 +23880,7 @@
 	
 	    var lines = result.inner_hits.cues.hits.hits;
 	    var time = new Date(result._source.broadcasted_at * 1000);
-	    var date = time.getDate() + '/' + time.getMonth() + '/' + time.getFullYear();
+	    var date = time.getDate() + '/' + (time.getMonth() + 1) + '/' + time.getFullYear();
 	
 	    var linesNode = lines.map(function (line, index) {
 	        return _react2.default.createElement(_line.Line, { line: line, serie: result, key: line._score + index, ga: ga });

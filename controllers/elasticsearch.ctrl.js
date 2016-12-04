@@ -176,6 +176,9 @@ function search( input ) {
             },
             from: 0,
             size: 50,
+            sort: [
+                { broadcasted_at: 'desc' }
+            ],
             query: {
                 nested: {
                     path: "cues",
