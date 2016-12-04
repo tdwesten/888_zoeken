@@ -5,12 +5,12 @@ var favicon = require( 'serve-favicon' );
 var logger = require( 'morgan' );
 var cookieParser = require( 'cookie-parser' );
 var bodyParser = require( 'body-parser' );
-var mongoose = require( 'mongoose' );
 var compression = require( 'compression' );
 var utils = require( './controllers/util.ctrl.js' );
 var http = require( 'http' );
 var env = require('node-env-file');
 
+var mongoose = require( 'mongoose' );
 mongoose.Promise = require('bluebird'); 
 
 env('.env');
@@ -18,15 +18,14 @@ env('.env');
 // Routes
 var routes = require( './routes/index' );
 var search = require( './routes/search' );
-var importer = require( './routes/import' );
 
 // App
 var port = utils.normalizePort( process.env.PORT );
 var app = express();
 
-
 // View engine setup
-app.use( express.static( __dirname + '/views' ) ); // set the static files location /public/img will be /img for users
+// set the static files location /public/img will be /img for users
+app.use( express.static( __dirname + '/views' ) );
 app.set( 'view engine', 'ejs' ); // set up ejs for templating
 
 app.set( 'port', port );
@@ -45,7 +44,6 @@ app.use( express.static( path.join( __dirname, 'public' ) ) );
 
 app.use( '/', routes );
 app.use( '/search', search );
-app.use( '/import', importer );
 
 mongoose.connect( process.env.MONGODB );
 
