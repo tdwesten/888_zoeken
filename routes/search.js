@@ -14,7 +14,7 @@ router.get( '/s/:input', function ( req, res ) {
             slack.webhook( {
                 channel: "#888",
                 username: "888",
-                text: "Er is gezocht op: " + req.params.input + "! - " + result.hits.hits.total + " resultaten"
+                text: "Er is gezocht op: " + req.params.input + "! - " + result.hits.total + " resultaten"
             }, function ( err, response ) {
             } );
 
