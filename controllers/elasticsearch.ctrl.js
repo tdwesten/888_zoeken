@@ -185,18 +185,13 @@ function search( input ) {
                     query: {
                         function_score: {
                             query: {
-                                multi_match: {
-                                    query: input.toLowerCase(),
-                                    type: "phrase",
-                                    fields: [
-                                        "cues.text^3",
-                                        "serieName^2.5",
-                                        "serieDescription^2",
-                                        "description^2",
-                                        "name^2"
-                                    ],
-                                    // fuzziness: "1",
-                                    prefix_length: 2
+                                match : {
+                                    "cues.text" : {
+                                        query : input.toLowerCase(),
+                                        operator : "and",
+                                        zero_terms_query: "all",
+                                        fuzziness: "auto",
+                                    }
                                 }
                             }
                         }
